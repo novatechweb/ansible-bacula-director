@@ -17,12 +17,10 @@
   command: alternatives --set libbaccats.so /usr/lib64/libbaccats-mysql.so
 - name: Make sure bacula user is in the qemu group
   user: name=bacula groups=qemu append=yes
-- name: Make sure bacula user is in the dockerroot group (RedHat)
-  user: name=bacula groups=dockerroot append=yes
-  when: ansible_os_family == "RedHat"
-- name: Make sure bacula user is in the docker group (not RedHat)
+- name: Create the docker group
+  group: name=docker system=yes
+- name: Make sure bacula user is in the docker group
   user: name=bacula groups=docker append=yes
-  when: ansible_os_family != "RedHat"
 - name: libvirt polkit
   copy: src=50-bacula-libvirt-access.pkla
         dest=/etc/polkit-1/localauthority/50-local.d/50-bacula-libvirt-access.pkla
