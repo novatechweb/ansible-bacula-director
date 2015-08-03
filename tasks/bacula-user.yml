@@ -1,0 +1,63 @@
+---
+
+- name: Make sure bacula user is in the qemu group
+  user:
+    name: bacula
+    groups: qemu
+    append: yes
+
+- name: Create the docker group
+  group:
+    name: docker
+    system: yes
+
+- name: Make sure bacula user is in the docker group
+  user:
+    name: bacula
+    groups: docker
+    append: yes
+
+- name: make dir - /var/spool/bacula/.ssh/
+  file:
+    path: /var/spool/bacula/.ssh/
+    state: directory
+    owner: bacula
+    group: bacula
+    mode: 'u=rwx,g=,o='
+  sudo: yes
+  sudo_user: bacula
+
+- name: template - /var/spool/bacula/.ssh/config
+  template:
+    src: config
+    dest: /var/spool/bacula/.ssh/config
+    mode: 'u=rw,g=,o='
+    force: no
+  sudo: yes
+  sudo_user: bacula
+
+- name: copy - /var/spool/bacula/.ssh/known_hosts
+  copy:
+    src: known_hosts
+    dest: /var/spool/bacula/.ssh/known_hosts
+    mode: 'u=rw,g=,o='
+    force: no
+  sudo: yes
+  sudo_user: bacula
+
+- name: Generate git@github.com ssh key
+  command: 'ssh-keygen -b 4098 -t rsa -P "" -f /var/spool/bacula/.ssh/bacula@{{ ansible_fqdn }}-git@github.com -C "from: bacula@{{ ansible_fqdn }} to: git@github.com"'
+  args:
+    creates: /var/spool/bacula/.ssh/bacula@{{ ansible_fqdn }}-git@github.com
+  sudo: yes
+  sudo_user: bacula
+
+- name: Configure git user.name for bacula user
+  command: 'git config --global user.name "bacula user @ {{ ansible_fqdn }}"'
+  sudo: yes
+  sudo_user: bacula
+
+- name: Configure git user.email for bacula user
+  command: 'git config --global user.email "bacula@{{ ansible_fqdn }}"'
+  sudo: yes
+  sudo_user: bacula
