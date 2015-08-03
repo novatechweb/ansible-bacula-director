@@ -13,6 +13,7 @@ require {
         type docker_t;
         type docker_var_run_t;
         type sysctl_net_t;
+        type ssh_exec_t;
         class process setsched;
         class unix_stream_socket connectto;
         class file { write execute read create unlink open getattr execute_no_trans };
@@ -38,6 +39,7 @@ allow bacula_t virtd_t:unix_stream_socket connectto;
 #!!!! This avc can be allowed using the boolean 'daemons_enable_cluster_mode'
 allow bacula_t docker_t:unix_stream_socket connectto;
 allow bacula_t docker_var_run_t:sock_file write;
+allow bacula_t ssh_exec_t:file { execute execute_no_trans };
 allow bacula_t sysctl_net_t:dir search;
 allow bacula_t sysctl_net_t:file { read open };
 
