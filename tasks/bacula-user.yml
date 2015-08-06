@@ -53,8 +53,9 @@
   command: 'ssh-keygen -b 4098 -t rsa -P "" -f /var/spool/bacula/.ssh/bacula@{{ ansible_fqdn }}-git@github.com -C "from: bacula@{{ ansible_fqdn }} to: git@github.com"'
   args:
     creates: /var/spool/bacula/.ssh/bacula@{{ ansible_fqdn }}-git@github.com
-  sudo: yes
-  sudo_user: bacula
+  become: true
+  become_user: bacula
+  become_method: sudo
 
 - name: Read public key
   command: cat /var/spool/bacula/.ssh/bacula@{{ ansible_fqdn }}-git@github.com.pub
