@@ -14,12 +14,13 @@ require {
         type docker_var_run_t;
         type sysctl_net_t;
         type ssh_exec_t;
+        type svirt_sandbox_file_t;
         class process setsched;
         class unix_stream_socket connectto;
-        class file { write execute read create unlink open getattr execute_no_trans };
+        class file { write execute read create unlink open getattr execute_no_trans setattr };
         class sock_file write;
         class blk_file { read open };
-        class dir { search write remove_name create add_name rmdir };
+        class dir { search write remove_name create add_name rmdir setattr };
 }
 
 #============= bacula_t ==============
@@ -43,3 +44,5 @@ allow bacula_t ssh_exec_t:file { execute execute_no_trans };
 allow bacula_t sysctl_net_t:dir search;
 allow bacula_t sysctl_net_t:file { read open };
 
+allow bacula_t svirt_sandbox_file_t:dir { write add_name setattr };
+allow bacula_t svirt_sandbox_file_t:file { write create setattr };
