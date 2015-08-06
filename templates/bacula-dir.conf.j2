@@ -108,10 +108,10 @@ FileSet {
 #    directory to give a reasonable FileSet to backup to
 #    disk storage during initial testing.
 #
-    File = /usr/sbin
     {% if bacula_director_backup_vms is defined %}
     File = /var/lib/libvirt/backup
     {% endif %}
+    File = /tmp/docker
   }
 
 #
@@ -134,15 +134,13 @@ FileSet {
 #  and incremental backups other days
 Schedule {
   Name = "WeeklyCycle"
-  Run = Full 1st sun at 23:05
-  Run = Differential 2nd-5th sun at 23:05
-  Run = Incremental mon-sat at 23:05
+  Run = Full mon-fri at 23:05
 }
 
 # This schedule does the catalog. It starts after the WeeklyCycle
 Schedule {
   Name = "WeeklyCycleAfterBackup"
-  Run = Full sun-sat at 23:10
+  Run = Full mon-fri at 23:10
 }
 
 # This is the backup of the catalog
