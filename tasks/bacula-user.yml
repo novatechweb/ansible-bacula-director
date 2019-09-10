@@ -6,12 +6,6 @@
     groups: tape
     append: yes
 
-- name: Make sure bacula user is in the qemu group
-  user:
-    name: bacula
-    groups: qemu
-    append: yes
-
 - name: Create the docker group
   group:
     name: docker
@@ -66,10 +60,12 @@
 - name: Read public key
   command: cat /var/spool/bacula/.ssh/bacula@{{ ansible_fqdn }}-git@github.com.pub
   register: bacula_key
+  changed_when: false
 
 - debug:
     var: bacula_key.stdout_lines[0]
 
-- pause:
+- name: Verify or install public key
+  pause:
     prompt: "Verify or install the git@github.com key for the bacula user (/var/spool/bacula/.ssh/bacula@{{ ansible_fqdn }}-git@github.com.pub)"
   when: st_bacula_key.stat.exists == False

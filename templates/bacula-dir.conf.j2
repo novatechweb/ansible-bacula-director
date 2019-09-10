@@ -108,9 +108,6 @@ FileSet {
 #    directory to give a reasonable FileSet to backup to
 #    disk storage during initial testing.
 #
-    {% if bacula_director_backup_vms is defined %}
-    File = /var/lib/libvirt/backup
-    {% endif %}
     File = /tmp/docker
   }
 
@@ -262,16 +259,16 @@ Pool {
   Volume Retention = 365 days         # one year
 }
 
-# File Pool definition
-Pool {
-  Name = File
-  Pool Type = Backup
-  Recycle = yes                       # Bacula can automatically recycle Volumes
-  AutoPrune = yes                     # Prune expired volumes
-  Volume Retention = 365 days         # one year
-  Maximum Volume Bytes = 50G          # Limit Volume size to something reasonable
-  Maximum Volumes = 100               # Limit number of Volumes in Pool
-}
+# # File Pool definition
+# Pool {
+#   Name = File
+#   Pool Type = Backup
+#   Recycle = yes                       # Bacula can automatically recycle Volumes
+#   AutoPrune = yes                     # Prune expired volumes
+#   Volume Retention = 365 days         # one year
+#   Maximum Volume Bytes = 50G          # Limit Volume size to something reasonable
+#   Maximum Volumes = 100               # Limit number of Volumes in Pool
+# }
 
 
 # Scratch pool definition
@@ -281,13 +278,13 @@ Pool {
 }
 
 # LTO6 Test pool definition
-Pool {
-  Name = LTO6test
-  Pool Type = Backup
-  Recycle = yes                       # Bacula can automatically recycle Volumes
-  AutoPrune = yes                     # Prune expired volumes
-  Volume Retention = 365 days         # one year
-}
+# Pool {
+#   Name = LTO6test
+#   Pool Type = Backup
+#   Recycle = yes                       # Bacula can automatically recycle Volumes
+#   AutoPrune = yes                     # Prune expired volumes
+#   Volume Retention = 365 days         # one year
+# }
 
 #
 # Restricted console used by tray-monitor to get the status of the director
